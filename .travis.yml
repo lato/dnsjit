@@ -9,18 +9,12 @@ addons:
     - liblmdb-dev
     - libck-dev
     - libgnutls28-dev
-language: c
-compiler:
-  - clang
-  - gcc
-install: ./autogen.sh
+  sonarcloud:
+    organization: "dns-oarc"
+    token:
+      secure: "BeuBzbDtRTlOhtPH3o2Xm7A0XFvtpfEGVHkRloHA3c2gKfdyv6PVCvg1T1lh7Zh0kXpwtzFU3gxPTX2MwSIUPt/SfG+j2hfjT7ib3Eu0degtDGyq22i+PvmBCovoyh95E4ZQ8fn8u2+BIbwscuTBQBN0caEdfxS5x8XYyvZxMpeo+DkfKZ/1JZg5Yk1ArQX9JSxI38Do0adUFZDUTG7+ttMfVrtwt4rjKoRJ4KZ0WJJBL/ITF5XS8G1WvBcCyY+snIOglvm5zLBL5jxtr/e8Ni13qW/1MOvu2TTRqcoVg1kW7DzY8qslvVFNdpmBxEuxhnBiWQ0MTQ5N3J8q+cHDWyZqCNTGuCdnX4aXED3IBuKByunNO1xfirBcuUE+8WgVNzRBz7FH/Uw6w4Ql+6HCsIjiUknyHgl/8afXEyXiuT+YUgS2bcWOaqr7knZ1ttNxzEMOMzNlEcu12Id+96c9Xiu17IOE5TCxet66U52CyCOU9Zobx3+XCKiY1VpotZTjlUjR4v0F+lNw7KZLSVRr6vWeUQsEBMhxVQsjcIG/DM7TWbxukUt8DKqgM6Ll1m0mFCV/gsDaZ5DmvVnuG2RWvQ9urUTk7em7UgVPAqKFz+I2qMlK4gnap276H/3wY9Xq62RwsqxUiGpBpckP2UOLdB14Us5rwBRIepRHBTt8/jk="
 script:
+  - ./autogen.sh
   - ./configure --enable-warn-all
-  - make dist
-  - tar zxvf *.tar.gz
-  - cd dnsjit-[0-9]*
-  - mkdir build
-  - cd build
-  - ../configure --enable-warn-all
-  - make
-  - make test
+  - build-wrapper-linux-x86-64 --out-dir bw-output make clean all
+  - sonar-scanner
